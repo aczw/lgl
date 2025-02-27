@@ -1,10 +1,11 @@
+#define GLFW_INCLUDE_NONE
+
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 #include <iostream>
-#include <vector>
 
 int main() {
   std::cout << "__cplusplus: " << __cplusplus << std::endl;
-
-  std::vector<int> v = {1, 2, 3};
 
   return 0;
 }
