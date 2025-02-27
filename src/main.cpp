@@ -33,7 +33,7 @@ void check_shader_compile_status(GLuint shader) {
   glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
   if (!success) {
-    glGetShaderInfoLog(shader, 512, NULL, info_log);
+    glGetShaderInfoLog(shader, 512, nullptr, info_log);
     std::cout << "error compiling shader: " << info_log << std::endl;
   }
 }
@@ -45,7 +45,7 @@ void check_shader_prog_link_status(GLuint shader_prog) {
   glGetProgramiv(shader_prog, GL_LINK_STATUS, &success);
 
   if (!success) {
-    glGetProgramInfoLog(shader_prog, 512, NULL, info_log);
+    glGetProgramInfoLog(shader_prog, 512, nullptr, info_log);
     std::cout << "error linking shader program: " << info_log << std::endl;
   }
 }
@@ -80,8 +80,13 @@ int main() {
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
   float vertices[] = {
-      -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f,
+      0.5f,  0.5f,  0.0f,  // Top right
+      0.5f,  -0.5f, 0.0f,  // Bottom right
+      -0.5f, -0.5f, 0.0f,  // Bottom left
+      -0.5f, 0.5f,  0.0f   // Top left
   };
+
+  unsigned int indices[] = {0, 1, 3, 1, 2, 3};
 
   GLuint vao;
   glGenVertexArrays(1, &vao);
@@ -92,13 +97,18 @@ int main() {
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+  GLuint ebo;
+  glGenBuffers(1, &ebo);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
   GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vs, 1, &vs_src, NULL);
+  glShaderSource(vs, 1, &vs_src, nullptr);
   glCompileShader(vs);
   check_shader_compile_status(vs);
 
   GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fs, 1, &fs_src, NULL);
+  glShaderSource(fs, 1, &fs_src, nullptr);
   glCompileShader(fs);
   check_shader_compile_status(fs);
 
@@ -121,7 +131,8 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(shader_prog);
     glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    glBindVertexArray(0);
 
     glfwSwapBuffers(window);
     glfwPollEvents();
