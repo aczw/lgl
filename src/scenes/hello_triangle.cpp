@@ -9,7 +9,7 @@
 
 #include "hello_triangle.hpp"
 
-namespace learnogl::scenes::hello_triangle {
+namespace lgl::scenes::hello_triangle {
 
 const char* const vs_src =
     "#version 460 core\n"

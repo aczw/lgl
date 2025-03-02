@@ -9,7 +9,7 @@
 
 #include "ebo_rectangle.hpp"
 
-namespace learnogl::scenes::ebo_rectangle {
+namespace lgl::scenes::ebo_rectangle {
 
 const char* const vs_src =
     "#version 460 core\n"
