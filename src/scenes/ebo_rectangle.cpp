@@ -1,3 +1,4 @@
+#include <array>
 #include <cstdlib>
 #include <iostream>
 
@@ -9,48 +10,49 @@
 #include "ebo_rectangle.hpp"
 
 namespace scenes::ebo_rectangle {
-
-const char* vs_src =
+const char* const vs_src =
     "#version 460 core\n"
     "layout (location = 0) in vec3 vs_Pos;\n"
     "void main() {\n"
     "  gl_Position = vec4(vs_Pos, 1.0);\n"
     "}";
 
-const char* fs_src =
+const char* const fs_src =
     "#version 460 core\n"
     "out vec4 out_Col;\n"
     "void main() {\n"
     "  out_Col = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
     "}";
 
-void process_input(GLFWwindow* window) {
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-    glfwSetWindowShouldClose(window, true);
+namespace {
+  void process_input(GLFWwindow* window) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+      glfwSetWindowShouldClose(window, true);
+    }
   }
-}
 
-void check_shader_compile_status(GLuint shader) {
-  int success;
-  char info_log[512];
+  void check_shader_compile_status(GLuint shader) {
+    int success = -1;
+    std::array<char, 512> info_log{};
 
-  glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
-  if (!success) {
-    glGetShaderInfoLog(shader, 512, nullptr, info_log);
-    std::cout << "error compiling shader: " << info_log << std::endl;
+    if (!success) {
+      glGetShaderInfoLog(shader, 512, nullptr, info_log.data());
+      std::cout << "error compiling shader: " << info_log.data() << std::endl;
+    }
   }
-}
 
-void check_shader_prog_link_status(GLuint shader_prog) {
-  int success;
-  char info_log[512];
+  void check_shader_prog_link_status(GLuint shader_prog) {
+    int success = -1;
+    std::array<char, 512> info_log{};
 
-  glGetProgramiv(shader_prog, GL_LINK_STATUS, &success);
+    glGetProgramiv(shader_prog, GL_LINK_STATUS, &success);
 
-  if (!success) {
-    glGetProgramInfoLog(shader_prog, 512, nullptr, info_log);
-    std::cout << "error linking shader program: " << info_log << std::endl;
+    if (!success) {
+      glGetProgramInfoLog(shader_prog, 512, nullptr, info_log.data());
+      std::cout << "error linking shader program: " << info_log.data() << std::endl;
+    }
   }
 }
 
@@ -71,6 +73,7 @@ int main() {
 
   glfwMakeContextCurrent(window);
 
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
   if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
     std::cout << "Failed to init GLAD" << std::endl;
     glfwTerminate();
@@ -78,33 +81,34 @@ int main() {
   }
 
   glViewport(0, 0, 800, 600);
-  glfwSetFramebufferSizeCallback(
-      window, [](GLFWwindow* window, int width, int height) { glViewport(0, 0, width, height); });
+  glfwSetFramebufferSizeCallback(window, [](GLFWwindow* /* window */, int width, int height) {
+    glViewport(0, 0, width, height);
+  });
 
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-  float vertices[] = {
+  std::array vertices{
       0.5f,  0.5f,  0.0f,  // Top right
       0.5f,  -0.5f, 0.0f,  // Bottom right
       -0.5f, -0.5f, 0.0f,  // Bottom left
       -0.5f, 0.5f,  0.0f   // Top left
   };
 
-  unsigned int indices[] = {0, 1, 3, 1, 2, 3};
+  std::array indices{0, 1, 3, 1, 2, 3};
 
-  GLuint vao;
+  GLuint vao = 0;
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
 
-  GLuint vbo;
+  GLuint vbo = 0;
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(), GL_STATIC_DRAW);
 
-  GLuint ebo;
+  GLuint ebo = 0;
   glGenBuffers(1, &ebo);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices.data(), GL_STATIC_DRAW);
 
   GLuint vs = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vs, 1, &vs_src, nullptr);
@@ -145,5 +149,4 @@ int main() {
   glfwTerminate();
   return EXIT_SUCCESS;
 }
-
-}  // namespace scenes::ebo_rectangle
+}

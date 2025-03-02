@@ -1,2 +1,5 @@
 BasedOnStyle: Chromium
 ColumnLimit: 100
+FixNamespaceComments: false
+NamespaceIndentation: Inner
+InsertNewlineAtEOF: true
