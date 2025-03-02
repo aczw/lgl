@@ -1,5 +1,7 @@
 #pragma once
 
-namespace scenes::hello_triangle {
+namespace learnogl::scenes::hello_triangle {
+
 int main();
+
 }

@@ -1,5 +1,7 @@
 #pragma once
 
-namespace scenes::ebo_rectangle {
+namespace learnogl::scenes::ebo_rectangle {
+
 int main();
+
 }

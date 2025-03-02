@@ -9,7 +9,8 @@
 
 #include "hello_triangle.hpp"
 
-namespace scenes::hello_triangle {
+namespace learnogl::scenes::hello_triangle {
+
 const char* const vs_src =
     "#version 460 core\n"
     "layout (location = 0) in vec3 vs_Pos;\n"
@@ -81,9 +82,8 @@ int main() {
   }
 
   glViewport(0, 0, 800, 600);
-  glfwSetFramebufferSizeCallback(window, [](GLFWwindow* /* window */, int width, int height) {
-    glViewport(0, 0, width, height);
-  });
+  glfwSetFramebufferSizeCallback(
+      window, [](GLFWwindow* /* window */, int width, int height) { glViewport(0, 0, width, height); });
 
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
@@ -138,4 +138,5 @@ int main() {
   glfwTerminate();
   return EXIT_SUCCESS;
 }
+
 }
