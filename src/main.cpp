@@ -3,7 +3,7 @@
 #include "scenes/ebo_rectangle.hpp"
 // #include "scenes/hello_triangle.hpp"
 
-using namespace learnogl::scenes;
+using namespace lgl::scenes;
 
 int main() {
   // hello_triangle::main();
