@@ -8,16 +8,20 @@
 
 const char* vs_src =
     "#version 460 core\n"
-    "layout (location = 0) in vec3 vs_Pos;\n"
+    "layout (location = 0) in vec4 vs_Pos;\n"
+    "layout (location = 1) in vec4 vs_Col;\n"
+    "out vec4 fs_Col;\n"
     "void main() {\n"
-    "  gl_Position = vec4(vs_Pos, 1.0);\n"
+    "  fs_Col = vs_Col;\n"
+    "  gl_Position = vs_Pos;\n"
     "}";
 
 const char* fs_src =
     "#version 460 core\n"
+    "in vec4 fs_Col;\n"
     "out vec4 out_Col;\n"
     "void main() {\n"
-    "  out_Col = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "  out_Col = fs_Col;\n"
     "}";
 
 void process_input(GLFWwindow* window) {
@@ -77,16 +81,30 @@ int main() {
   glfwSetFramebufferSizeCallback(
       window, [](GLFWwindow* window, int width, int height) { glViewport(0, 0, width, height); });
 
-  glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
   float vertices[] = {
-      0.5f,  0.5f,  0.0f,  // Top right
-      0.5f,  -0.5f, 0.0f,  // Bottom right
-      -0.5f, -0.5f, 0.0f,  // Bottom left
-      -0.5f, 0.5f,  0.0f   // Top left
+      // position 0
+      -0.5f, -0.5f, 0.0f, 1.0f,
+      // color 0
+      1.0f, 0.0f, 0.0f, 1.0f,
+      // position 1
+      0.5f, -0.5f, 0.0f, 1.0f,
+      // color 1
+      0.0f, 1.0f, 0.0f, 1.0f,
+      // position 2
+      0.0f, 0.5f, 0.0f, 1.0f,
+      // color 2
+      0.0f, 0.0f, 1.0f, 1.0f
+
+      // 0.5f,  0.5f,  0.0f,  // Top right
+      // 0.5f,  -0.5f, 0.0f,  // Bottom right
+      // -0.5f, -0.5f, 0.0f,  // Bottom left
+      // -0.5f, 0.5f,  0.0f   // Top left
   };
 
-  unsigned int indices[] = {0, 1, 3, 1, 2, 3};
+  // unsigned int indices[] = {0, 1, 3, 1, 2, 3};
+  unsigned int indices[] = {0, 1, 2};
 
   GLuint vao;
   glGenVertexArrays(1, &vao);
@@ -122,8 +140,11 @@ int main() {
   glDeleteShader(vs);
   glDeleteShader(fs);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+  auto stride = 8 * sizeof(float);
+  glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, stride, nullptr);
   glEnableVertexAttribArray(0);
+  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, stride, (void*)(4 * sizeof(float)));
+  glEnableVertexAttribArray(1);
 
   while (!glfwWindowShouldClose(window)) {
     process_input(window);
