@@ -74,7 +74,6 @@ int main() {
 
   glfwMakeContextCurrent(window);
 
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
   if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
     std::cout << "Failed to init GLAD" << std::endl;
     glfwTerminate();

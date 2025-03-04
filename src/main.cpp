@@ -1,13 +1,11 @@
 #include <cstdlib>
 
-#include "scenes/ebo_rectangle.hpp"
-// #include "scenes/hello_triangle.hpp"
+#include "scenes/intro_shaders.hpp"
 
 using namespace lgl::scenes;
 
 int main() {
-  // hello_triangle::main();
-  ebo_rectangle::main();
+  intro_shaders::main();
 
   return EXIT_SUCCESS;
 }

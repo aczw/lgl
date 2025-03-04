@@ -9,10 +9,14 @@ set(CMAKE_CXX_EXTENSIONS NO)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glad CONFIG REQUIRED)
 
+set(SRC_DIR "src")
+set(SCENES_DIR "${SRC_DIR}/scenes")
+
 add_executable(lgl
-  src/main.cpp
-  src/scenes/ebo_rectangle.cpp
-  src/scenes/hello_triangle.cpp
+  ${SRC_DIR}/main.cpp
+  ${SCENES_DIR}/ebo_rectangle.cpp
+  ${SCENES_DIR}/hello_triangle.cpp
+  ${SCENES_DIR}/intro_shaders.cpp
 )
 
 target_link_libraries(lgl PRIVATE glfw)
