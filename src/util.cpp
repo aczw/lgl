@@ -34,8 +34,9 @@ std::optional<GLFWwindow*> create_window(int width, int height) {
   }
 
   glViewport(0, 0, width, height);
-  glfwSetFramebufferSizeCallback(
-      window, [](GLFWwindow* /* window */, int width, int height) { glViewport(0, 0, width, height); });
+  glfwSetFramebufferSizeCallback(window, [](GLFWwindow* /* window */, int width, int height) {
+    glViewport(0, 0, width, height);
+  });
 
   return window;
 }
@@ -50,7 +51,8 @@ bool check_shader_compile_status(GLuint shader, std::source_location& src_loc) {
     glGetShaderInfoLog(shader, 512, nullptr, info_log.data());
 
     fs::path src_file = src_loc.file_name();
-    std::cout << src_file.filename() << ": line " << src_loc.line() << ": Error compiling shader (info below):\n"
+    std::cout << src_file.filename() << ": line " << src_loc.line()
+              << ": Error compiling shader (info below):\n"
               << info_log.data();
   }
 
@@ -67,7 +69,8 @@ bool check_shader_prog_link_status(GLuint shader_prog, std::source_location& src
     glGetProgramInfoLog(shader_prog, 512, nullptr, info_log.data());
 
     fs::path src_file = src_loc.file_name();
-    std::cout << src_file.filename() << ": line " << src_loc.line() << ": Error linking shader program (info below):\n"
+    std::cout << src_file.filename() << ": line " << src_loc.line()
+              << ": Error linking shader program (info below):\n"
               << info_log.data();
   }
 

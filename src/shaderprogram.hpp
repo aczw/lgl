@@ -13,8 +13,9 @@ class ShaderProgram {
 
  public:
   /**
-   * Compiles and links a vertex and fragment shader together into a shader program object. By giving @param src_loc a
-   * default value, it "customizes" it to equal where the call site is, instead of this header file.
+   * Compiles and links a vertex and fragment shader together into a shader program object. By
+   * giving @param src_loc a default value, it "customizes" it to equal where the call site is,
+   * instead of this header file.
    *
    * @param rel_vs_path relative path to the vertex shader from the base directory
    * @param rel_fs_path relative path to the fragment shader from the base directory
@@ -27,7 +28,8 @@ class ShaderProgram {
   void use();
 
   /**
-   * Gets a handle to the uniform variable in this shader program. This function works without calling use().
+   * Gets a handle to the uniform variable in this shader program. This function works without
+   * calling use().
    *
    * @param name name of the uniform variable
    * @return GLint handle to the variable

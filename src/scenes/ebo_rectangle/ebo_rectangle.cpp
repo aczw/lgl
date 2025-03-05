@@ -81,8 +81,9 @@ int main() {
   }
 
   glViewport(0, 0, 800, 600);
-  glfwSetFramebufferSizeCallback(
-      window, [](GLFWwindow* /* window */, int width, int height) { glViewport(0, 0, width, height); });
+  glfwSetFramebufferSizeCallback(window, [](GLFWwindow* /* window */, int width, int height) {
+    glViewport(0, 0, width, height);
+  });
 
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 

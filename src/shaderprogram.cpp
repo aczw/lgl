@@ -9,31 +9,38 @@
 
 namespace lgl {
 
-ShaderProgram::ShaderProgram(std::string_view rel_vs_path, std::string_view rel_fs_path, std::source_location src_loc) {
+ShaderProgram::ShaderProgram(std::string_view rel_vs_path,
+                             std::string_view rel_fs_path,
+                             std::source_location src_loc) {
   std::filesystem::path src_file = src_loc.file_name();
   std::filesystem::path base_dir = src_file.parent_path();
 
+  // Constructor automatically opens the files
   std::ifstream vs_file(base_dir / rel_vs_path);
   std::ifstream fs_file(base_dir / rel_fs_path);
 
   if (!vs_file.is_open() || !fs_file.is_open()) {
-    std::cout << "ShaderProgram::ShaderProgram(): unable to open vertex or fragment shader file" << std::endl;
+    std::cout << "ShaderProgram::ShaderProgram(): unable to open vertex or fragment shader file"
+              << std::endl;
     return;
   }
 
-  std::stringstream vs_buffer;
-  std::stringstream fs_buffer;
-  vs_buffer << vs_file.rdbuf();
-  fs_buffer << fs_file.rdbuf();
+  // Passing the file's stream buffer to the `<<` operator passes the entire contents of the file
+  std::stringstream vs_stream;
+  std::stringstream fs_stream;
+  vs_stream << vs_file.rdbuf();
+  fs_stream << fs_file.rdbuf();
 
-  // Can't figure out how to directly pass it to glShaderSource()
-  std::string vs = vs_buffer.str();
-  const char* vs_c_str = vs.c_str();
-  std::string fs = fs_buffer.str();
-  const char* fs_c_str = fs.c_str();
+  // Avoid potentially allocating a new string
+  std::string_view vs = vs_stream.view();
+  std::string_view fs = fs_stream.view();
+  int vs_size = static_cast<int>(vs.size());
+  int fs_size = static_cast<int>(fs.size());
+  const char* vs_data = vs.data();
+  const char* fs_data = fs.data();
 
   GLuint vs_handle = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vs_handle, 1, &vs_c_str, nullptr);
+  glShaderSource(vs_handle, 1, &vs_data, &vs_size);
   glCompileShader(vs_handle);
 
   if (!util::check_shader_compile_status(vs_handle, src_loc)) {
@@ -41,7 +48,7 @@ ShaderProgram::ShaderProgram(std::string_view rel_vs_path, std::string_view rel_
   }
 
   GLuint fs_handle = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fs_handle, 1, &fs_c_str, nullptr);
+  glShaderSource(fs_handle, 1, &fs_data, &fs_size);
   glCompileShader(fs_handle);
 
   if (!util::check_shader_compile_status(fs_handle, src_loc)) {
