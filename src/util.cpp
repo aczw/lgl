@@ -8,8 +8,6 @@
 
 namespace lgl::util {
 
-namespace fs = std::filesystem;
-
 std::optional<GLFWwindow*> create_window(int width, int height) {
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -19,7 +17,7 @@ std::optional<GLFWwindow*> create_window(int width, int height) {
   GLFWwindow* window = glfwCreateWindow(width, height, "lgl", nullptr, nullptr);
 
   if (!window) {
-    std::cout << "lgl: Failed to create GLFW window" << std::endl;
+    std::cout << "Failed to create GLFW window" << std::endl;
     glfwTerminate();
 
     return std::nullopt;
@@ -28,7 +26,7 @@ std::optional<GLFWwindow*> create_window(int width, int height) {
   glfwMakeContextCurrent(window);
 
   if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
-    std::cout << "lgl: Failed to init GLAD" << std::endl;
+    std::cout << "Failed to init GLAD" << std::endl;
     glfwTerminate();
 
     return std::nullopt;
@@ -79,8 +77,6 @@ bool check_shader_prog_link_status(GLuint shader_prog, std::source_location& src
 }
 
 std::filesystem::path resolve_texture(const std::string_view rel_path) {
-  namespace fs = std::filesystem;
-
   fs::path util_file = std::source_location::current().file_name();
   fs::path src_dir = util_file.parent_path();
   fs::path texture_dir = src_dir / "textures";

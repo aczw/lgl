@@ -4,7 +4,6 @@
 
 #include <stb_image.h>
 #include <array>
-#include <cmath>
 #include <cstdlib>
 #include <iostream>
 #include <optional>
@@ -25,7 +24,7 @@ namespace {
 }
 
 int main() {
-  std::optional<GLFWwindow*> window_opt = util::create_window(800, 600);
+  std::optional<GLFWwindow*> window_opt = util::create_window(1600, 1200);
 
   if (!window_opt) {
     return EXIT_FAILURE;
@@ -37,13 +36,14 @@ int main() {
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
   std::array vertices{
-      // Position         // Color
-      -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  // Bottom left
-      0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  // Bottom right
-      0.0f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f   // Top center
+      // Position         // Color          // UV
+      0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,  // Top right
+      0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // Bottom right
+      -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,  // Bottom left
+      -0.5f, 0.5f,  0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // Top left
   };
 
-  std::array indices{0, 1, 2};
+  std::array indices{0, 1, 3, 1, 2, 3};
 
   GLuint vao = 0;
   glGenVertexArrays(1, &vao);
@@ -61,12 +61,18 @@ int main() {
 
   ShaderProgram shader_prog("./shader.vert.glsl", "./shader.frag.glsl");
 
-  int stride = 6 * sizeof(float);
+  int stride = 8 * sizeof(float);
+
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void*>(0));
   glEnableVertexAttribArray(0);
+
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride,
                         reinterpret_cast<void*>(3 * sizeof(float)));
   glEnableVertexAttribArray(1);
+
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride,
+                        reinterpret_cast<void*>(6 * sizeof(float)));
+  glEnableVertexAttribArray(2);
 
   int width = 0;
   int height = 0;
@@ -80,18 +86,28 @@ int main() {
     return EXIT_FAILURE;
   }
 
+  GLuint tex_handle = 0;
+  glGenTextures(1, &tex_handle);
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  glBindTexture(GL_TEXTURE_2D, tex_handle);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+  glGenerateMipmap(GL_TEXTURE_2D);
+
+  stbi_image_free(data);
+
   while (!glfwWindowShouldClose(window)) {
     process_input(window);
 
     glClear(GL_COLOR_BUFFER_BIT);
 
-    double time = glfwGetTime();
-    double value = (std::sin(time) + 1.0f) * 0.5f;
-
     shader_prog.use();
-    GLint unifColLocation = shader_prog.get_uniform_location("u_Col");
-    glUniform4f(unifColLocation, 0.0f, static_cast<GLfloat>(value), 0.0f, 1.0f);
 
+    glBindTexture(GL_TEXTURE_2D, tex_handle);
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

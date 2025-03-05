@@ -79,7 +79,7 @@ int main() {
     glUniform4f(unifColLocation, 0.0f, static_cast<GLfloat>(value), 0.0f, 1.0f);
 
     glBindVertexArray(vao);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
     glfwSwapBuffers(window);
     glfwPollEvents();
