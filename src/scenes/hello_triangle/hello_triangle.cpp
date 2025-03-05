@@ -1,3 +1,5 @@
+#include "hello_triangle.hpp"
+
 #include <array>
 #include <cstdlib>
 #include <iostream>
@@ -6,8 +8,6 @@
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
-
-#include "hello_triangle.hpp"
 
 namespace lgl::scenes::hello_triangle {
 

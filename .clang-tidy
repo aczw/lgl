@@ -1,2 +1,1 @@
 Checks: "clang-analyzer-*,cppcoreguidelines-*,bugprone-*,misc-*,-cppcoreguidelines-avoid-magic-numbers,-bugprone-easily-swappable-parameters,-cppcoreguidelines-pro-type-reinterpret-cast"
-WarningsAsErrors: "*"

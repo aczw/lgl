@@ -1,3 +1,5 @@
+#include "ebo_rectangle.hpp"
+
 #include <array>
 #include <cstdlib>
 #include <iostream>
@@ -6,8 +8,6 @@
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
-
-#include "ebo_rectangle.hpp"
 
 namespace lgl::scenes::ebo_rectangle {
 
