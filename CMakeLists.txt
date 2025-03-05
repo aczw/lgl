@@ -15,6 +15,7 @@ set(SCENES_DIR "${SRC_DIR}/scenes")
 add_executable(lgl
   ${SRC_DIR}/main.cpp
   ${SRC_DIR}/shaderprogram.cpp
+  ${SRC_DIR}/util.cpp
 
   ${SCENES_DIR}/ebo_rectangle/ebo_rectangle.cpp
   ${SCENES_DIR}/hello_triangle/hello_triangle.cpp

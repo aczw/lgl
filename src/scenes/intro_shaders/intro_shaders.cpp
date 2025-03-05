@@ -1,10 +1,11 @@
 #include "intro_shaders.hpp"
 #include "../../shaderprogram.hpp"
+#include "../../util.hpp"
 
 #include <array>
 #include <cmath>
 #include <cstdlib>
-#include <iostream>
+#include <optional>
 #include <string_view>
 
 #define GLFW_INCLUDE_NONE
@@ -23,31 +24,13 @@ namespace {
 }
 
 int main() {
-  glfwInit();
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  std::optional<GLFWwindow*> window_opt = util::create_window(800, 600);
 
-  GLFWwindow* window = glfwCreateWindow(800, 600, "lgl", nullptr, nullptr);
-
-  if (!window) {
-    std::cout << "failed to create GLFW window" << std::endl;
-    glfwTerminate();
-
+  if (!window_opt) {
     return EXIT_FAILURE;
   }
 
-  glfwMakeContextCurrent(window);
-
-  if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
-    std::cout << "Failed to init GLAD" << std::endl;
-    glfwTerminate();
-    return EXIT_FAILURE;
-  }
-
-  glViewport(0, 0, 800, 600);
-  glfwSetFramebufferSizeCallback(
-      window, [](GLFWwindow* /* window */, int width, int height) { glViewport(0, 0, width, height); });
+  GLFWwindow* window = window_opt.value();
 
   // Doesn't need to be called every frame unless we're not sure that something else may modify it
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

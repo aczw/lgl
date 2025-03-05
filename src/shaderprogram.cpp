@@ -1,6 +1,6 @@
 #include "shaderprogram.hpp"
+#include "util.hpp"
 
-#include <array>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -8,32 +8,6 @@
 #include <sstream>
 
 namespace lgl {
-
-namespace {
-  void check_shader_compile_status(GLuint shader) {
-    int success = -1;
-    std::array<char, 512> info_log{};
-
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-
-    if (!success) {
-      glGetShaderInfoLog(shader, 512, nullptr, info_log.data());
-      std::cout << "lgl: Error compiling shader: " << info_log.data() << std::endl;
-    }
-  }
-
-  void check_shader_prog_link_status(GLuint shader_prog) {
-    int success = -1;
-    std::array<char, 512> info_log{};
-
-    glGetProgramiv(shader_prog, GL_LINK_STATUS, &success);
-
-    if (!success) {
-      glGetProgramInfoLog(shader_prog, 512, nullptr, info_log.data());
-      std::cout << "lgl: Error linking shader program: " << info_log.data() << std::endl;
-    }
-  }
-}
 
 ShaderProgram::ShaderProgram(std::string_view rel_vs_path, std::string_view rel_fs_path, std::source_location src_loc) {
   std::filesystem::path src_file = src_loc.file_name();
@@ -61,19 +35,28 @@ ShaderProgram::ShaderProgram(std::string_view rel_vs_path, std::string_view rel_
   GLuint vs_handle = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vs_handle, 1, &vs_c_str, nullptr);
   glCompileShader(vs_handle);
-  check_shader_compile_status(vs_handle);
+
+  if (!util::check_shader_compile_status(vs_handle, src_loc)) {
+    return;
+  }
 
   GLuint fs_handle = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fs_handle, 1, &fs_c_str, nullptr);
   glCompileShader(fs_handle);
-  check_shader_compile_status(fs_handle);
+
+  if (!util::check_shader_compile_status(fs_handle, src_loc)) {
+    return;
+  }
 
   handle = glCreateProgram();
 
   glAttachShader(handle, vs_handle);
   glAttachShader(handle, fs_handle);
   glLinkProgram(handle);
-  check_shader_prog_link_status(handle);
+
+  if (!util::check_shader_prog_link_status(handle, src_loc)) {
+    return;
+  }
 
   glDeleteShader(vs_handle);
   glDeleteShader(fs_handle);
