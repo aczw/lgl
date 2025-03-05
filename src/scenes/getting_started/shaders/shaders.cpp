@@ -1,6 +1,6 @@
-#include "intro_shaders.hpp"
-#include "../../shaderprogram.hpp"
-#include "../../util.hpp"
+#include "shaders.hpp"
+#include "../../../shaderprogram.hpp"
+#include "../../../util.hpp"
 
 #include <array>
 #include <cmath>
@@ -9,11 +9,10 @@
 #include <string_view>
 
 #define GLFW_INCLUDE_NONE
-
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
-namespace lgl::scenes::intro_shaders {
+namespace lgl::scenes::getting_started::shaders {
 
 namespace {
   void process_input(GLFWwindow* window) {

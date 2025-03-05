@@ -8,19 +8,23 @@ set(CMAKE_CXX_EXTENSIONS NO)
 
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glad CONFIG REQUIRED)
+find_package(Stb REQUIRED)
 
 set(SRC_DIR "src")
 set(SCENES_DIR "${SRC_DIR}/scenes")
+set(GETTING_STARTED_DIR "${SCENES_DIR}/getting_started")
 
 add_executable(lgl
   ${SRC_DIR}/main.cpp
   ${SRC_DIR}/shaderprogram.cpp
   ${SRC_DIR}/util.cpp
+  ${SRC_DIR}/stb_image.cpp
 
-  ${SCENES_DIR}/ebo_rectangle/ebo_rectangle.cpp
-  ${SCENES_DIR}/hello_triangle/hello_triangle.cpp
-  ${SCENES_DIR}/intro_shaders/intro_shaders.cpp
+  ${GETTING_STARTED_DIR}/hello_triangle/hello_triangle.cpp
+  ${GETTING_STARTED_DIR}/shaders/shaders.cpp
+  ${GETTING_STARTED_DIR}/textures/textures.cpp
 )
 
 target_link_libraries(lgl PRIVATE glfw)
 target_link_libraries(lgl PRIVATE glad::glad)
+target_include_directories(lgl PRIVATE ${Stb_INCLUDE_DIR})

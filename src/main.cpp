@@ -1,7 +1,7 @@
-#include "scenes/intro_shaders/intro_shaders.hpp"
+#include "scenes/getting_started/textures/textures.hpp"
 
-using namespace lgl::scenes;
+namespace scene = lgl::scenes::getting_started::textures;
 
 int main() {
-  return intro_shaders::main();
+  return scene::main();
 }

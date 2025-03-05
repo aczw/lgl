@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <iostream>
 #include <optional>
+#include <source_location>
 
 namespace lgl::util {
 
@@ -77,4 +78,13 @@ bool check_shader_prog_link_status(GLuint shader_prog, std::source_location& src
   return success;
 }
 
+std::filesystem::path resolve_texture(const std::string_view rel_path) {
+  namespace fs = std::filesystem;
+
+  fs::path util_file = std::source_location::current().file_name();
+  fs::path src_dir = util_file.parent_path();
+  fs::path texture_dir = src_dir / "textures";
+
+  return fs::canonical(texture_dir / rel_path);
+}
 }

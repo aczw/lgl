@@ -1,11 +1,12 @@
 {
   "dependencies": [
-    "glfw3",
     {
       "name": "glad",
       "features": [
         "gl-api-46"
       ]
-    }
+    },
+    "glfw3",
+    "stb"
   ]
 }
