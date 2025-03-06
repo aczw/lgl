@@ -74,6 +74,9 @@ int main() {
                         reinterpret_cast<void*>(6 * sizeof(float)));
   glEnableVertexAttribArray(2);
 
+  // OpenGL expects first pixel to be on the bottom left
+  stbi_set_flip_vertically_on_load(true);
+
   int width = 0;
   int height = 0;
   int num_channels = 0;
@@ -86,19 +89,45 @@ int main() {
     return EXIT_FAILURE;
   }
 
-  GLuint tex_handle = 0;
-  glGenTextures(1, &tex_handle);
+  GLuint tex_0_handle = 0;
+  glGenTextures(1, &tex_0_handle);
+  glBindTexture(GL_TEXTURE_2D, tex_0_handle);
 
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  glBindTexture(GL_TEXTURE_2D, tex_handle);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
   glGenerateMipmap(GL_TEXTURE_2D);
 
   stbi_image_free(data);
+
+  data = stbi_load(util::resolve_texture("./awesomeface.png").string().c_str(), &width, &height,
+                   &num_channels, 0);
+
+  if (!data) {
+    std::cout << "Failed to load image" << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  GLuint tex_1_handle = 0;
+  glGenTextures(1, &tex_1_handle);
+  glBindTexture(GL_TEXTURE_2D, tex_1_handle);
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+  glGenerateMipmap(GL_TEXTURE_2D);
+
+  stbi_image_free(data);
+
+  shader_prog.use();
+  shader_prog.set_int("tex_0", 0);
+  shader_prog.set_int("tex_1", 1);
 
   while (!glfwWindowShouldClose(window)) {
     process_input(window);
@@ -107,7 +136,11 @@ int main() {
 
     shader_prog.use();
 
-    glBindTexture(GL_TEXTURE_2D, tex_handle);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex_0_handle);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, tex_1_handle);
+
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
