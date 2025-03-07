@@ -61,7 +61,7 @@ int main() {
 
   ShaderProgram shader_prog("./shader.vert.glsl", "./shader.frag.glsl");
 
-  auto stride = static_cast<int>(8 * sizeof(float));
+  int stride = static_cast<int>(8 * sizeof(float));
 
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<GLvoid*>(0));
   glEnableVertexAttribArray(0);

@@ -17,9 +17,11 @@ class ShaderProgram {
    * giving @param src_loc a default value, it "customizes" it to equal where the call site is,
    * instead of this header file.
    *
+   * "Base directory" refers to the folder of the file where this is being called.
+   *
    * @param rel_vs_path relative path to the vertex shader from the base directory
    * @param rel_fs_path relative path to the fragment shader from the base directory
-   * @param src_loc
+   * @param src_loc source location info
    */
   ShaderProgram(std::string_view rel_vs_path,
                 std::string_view rel_fs_path,
