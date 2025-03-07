@@ -1,7 +1,7 @@
 #include "scenes/getting_started/textures/textures.hpp"
 
-namespace scene = lgl::scenes::getting_started::textures;
+using namespace lgl::scenes;
 
 int main() {
-  return scene::main();
+  return textures::main();
 }

@@ -12,7 +12,7 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
-namespace lgl::scenes::getting_started::shaders {
+namespace lgl::scenes::shaders {
 
 namespace {
   void process_input(GLFWwindow* window) {

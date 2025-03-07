@@ -13,7 +13,7 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
-namespace lgl::scenes::getting_started::textures {
+namespace lgl::scenes::textures {
 
 namespace {
   void process_input(GLFWwindow* window) {
@@ -35,7 +35,7 @@ int main() {
   // Doesn't need to be called every frame unless we're not sure that something else may modify it
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-  std::array vertices{
+  constexpr std::array vertices = {
       // Position         // Color          // UV
       0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,  // Top right
       0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // Bottom right
@@ -43,7 +43,7 @@ int main() {
       -0.5f, 0.5f,  0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // Top left
   };
 
-  std::array indices{0, 1, 3, 1, 2, 3};
+  constexpr std::array indices = {0, 1, 3, 1, 2, 3};
 
   GLuint vao = 0;
   glGenVertexArrays(1, &vao);
@@ -61,17 +61,17 @@ int main() {
 
   ShaderProgram shader_prog("./shader.vert.glsl", "./shader.frag.glsl");
 
-  int stride = 8 * sizeof(float);
+  auto stride = static_cast<int>(8 * sizeof(float));
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void*>(0));
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<GLvoid*>(0));
   glEnableVertexAttribArray(0);
 
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride,
-                        reinterpret_cast<void*>(3 * sizeof(float)));
+                        reinterpret_cast<GLvoid*>(3 * sizeof(float)));
   glEnableVertexAttribArray(1);
 
   glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride,
-                        reinterpret_cast<void*>(6 * sizeof(float)));
+                        reinterpret_cast<GLvoid*>(6 * sizeof(float)));
   glEnableVertexAttribArray(2);
 
   // OpenGL expects first pixel to be on the bottom left

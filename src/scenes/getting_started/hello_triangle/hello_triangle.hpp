@@ -1,6 +1,6 @@
 #pragma once
 
-namespace lgl::scenes::getting_started::hello_triangle {
+namespace lgl::scenes::hello_triangle {
 
 enum class Variant { triangle, ebo_rectangle };
 

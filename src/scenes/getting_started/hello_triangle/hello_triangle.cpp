@@ -9,7 +9,7 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
-namespace lgl::scenes::getting_started::hello_triangle {
+namespace lgl::scenes::hello_triangle {
 
 const char* const vs_src =
     "#version 460 core\n"

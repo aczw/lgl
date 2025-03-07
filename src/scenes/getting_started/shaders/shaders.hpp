@@ -1,6 +1,6 @@
 #pragma once
 
-namespace lgl::scenes::getting_started::shaders {
+namespace lgl::scenes::shaders {
 
 int main();
 

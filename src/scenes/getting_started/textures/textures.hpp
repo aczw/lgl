@@ -1,6 +1,6 @@
 #pragma once
 
-namespace lgl::scenes::getting_started::textures {
+namespace lgl::scenes::textures {
 
 int main();
 
