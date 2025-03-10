@@ -1,6 +1,7 @@
 #pragma once
 
 #include <filesystem>
+#include <glm/glm.hpp>
 #include <optional>
 #include <source_location>
 #include <string_view>
@@ -10,6 +11,10 @@
 #include <glad/glad.h>
 
 namespace lgl::util {
+
+constexpr glm::vec3 x_axis(1.0f, 0.0f, 0.0f);
+constexpr glm::vec3 y_axis(0.0f, 1.0f, 0.0f);
+constexpr glm::vec3 z_axis(0.0f, 0.0f, 1.0f);
 
 std::optional<GLFWwindow*> create_window(int width, int height);
 

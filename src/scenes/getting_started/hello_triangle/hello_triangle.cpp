@@ -11,14 +11,14 @@
 
 namespace lgl::scenes::hello_triangle {
 
-const char* const vs_src =
+constexpr const char* vs_src =
     "#version 460 core\n"
     "layout (location = 0) in vec3 vs_Pos;\n"
     "void main() {\n"
     "  gl_Position = vec4(vs_Pos, 1.0);\n"
     "}";
 
-const char* const fs_src =
+constexpr const char* fs_src =
     "#version 460 core\n"
     "out vec4 out_Col;\n"
     "void main() {\n"

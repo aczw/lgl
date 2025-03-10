@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.28..3.31)
 
 project(lgl VERSION 1.0 LANGUAGES CXX)
 
@@ -9,6 +9,7 @@ set(CMAKE_CXX_EXTENSIONS NO)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glad CONFIG REQUIRED)
 find_package(Stb REQUIRED)
+find_package(glm CONFIG REQUIRED)
 
 set(SRC_DIR "src")
 set(SCENES_DIR "${SRC_DIR}/scenes")
@@ -23,8 +24,10 @@ add_executable(lgl
   ${GETTING_STARTED_DIR}/hello_triangle/hello_triangle.cpp
   ${GETTING_STARTED_DIR}/shaders/shaders.cpp
   ${GETTING_STARTED_DIR}/textures/textures.cpp
+  ${GETTING_STARTED_DIR}/transformations/transformations.cpp
 )
 
 target_link_libraries(lgl PRIVATE glfw)
 target_link_libraries(lgl PRIVATE glad::glad)
 target_include_directories(lgl PRIVATE ${Stb_INCLUDE_DIR})
+target_link_libraries(lgl PRIVATE glm::glm)
