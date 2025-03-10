@@ -19,7 +19,7 @@ constexpr glm::vec3 z_axis(0.0f, 0.0f, 1.0f);
 std::optional<GLFWwindow*> create_window(int width, int height);
 
 bool check_shader_compile_status(GLuint shader, const std::source_location& src_loc);
-bool check_shader_prog_link_status(GLuint shader_prog, const std::source_location& src_loc);
+bool check_shader_program_link_status(GLuint shader_prog, const std::source_location& src_loc);
 
 /**
  * Returns the absolute file path to a texture file.

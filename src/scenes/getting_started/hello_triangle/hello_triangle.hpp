@@ -2,7 +2,7 @@
 
 namespace lgl::scenes::hello_triangle {
 
-enum class Variant { triangle, ebo_rectangle };
+enum class Variant { Triangle, EboRectangle };
 
 int main(Variant variant);
 

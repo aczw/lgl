@@ -2,6 +2,7 @@
 
 #include <array>
 #include <filesystem>
+#include <format>
 #include <iostream>
 #include <optional>
 #include <source_location>
@@ -51,15 +52,15 @@ bool check_shader_compile_status(GLuint shader, const std::source_location& src_
     glGetShaderInfoLog(shader, 512, nullptr, info_log.data());
 
     fs::path src_file = src_loc.file_name();
-    std::cout << src_file.filename() << ": line " << src_loc.line()
-              << ": Error compiling shader (info below):\n"
-              << info_log.data();
+    std::cout << std::format("Error compiling shader in {}({}, {}):\n{}",
+                             src_file.filename().string(), src_loc.line(), src_loc.column(),
+                             info_log.data());
   }
 
   return success;
 }
 
-bool check_shader_prog_link_status(GLuint shader_prog, const std::source_location& src_loc) {
+bool check_shader_program_link_status(GLuint shader_prog, const std::source_location& src_loc) {
   int success = 0;
   glGetProgramiv(shader_prog, GL_LINK_STATUS, &success);
 
@@ -68,9 +69,9 @@ bool check_shader_prog_link_status(GLuint shader_prog, const std::source_locatio
     glGetProgramInfoLog(shader_prog, 512, nullptr, info_log.data());
 
     fs::path src_file = src_loc.file_name();
-    std::cout << src_file.filename() << ": line " << src_loc.line()
-              << ": Error linking shader program (info below):\n"
-              << info_log.data();
+    std::cout << std::format("Error linking shader program in {}({}, {}):\n{}",
+                             src_file.filename().string(), src_loc.line(), src_loc.column(),
+                             info_log.data());
   }
 
   return success;

@@ -6,6 +6,8 @@
 #include <iostream>
 #include <source_location>
 #include <sstream>
+#include <string>
+#include <string_view>
 
 namespace lgl {
 
@@ -61,7 +63,7 @@ ShaderProgram::ShaderProgram(std::string_view rel_vs_path,
   glAttachShader(handle, fs_handle);
   glLinkProgram(handle);
 
-  if (!util::check_shader_prog_link_status(handle, src_loc)) {
+  if (!util::check_shader_program_link_status(handle, src_loc)) {
     return;
   }
 
@@ -73,19 +75,19 @@ void ShaderProgram::use() {
   glUseProgram(handle);
 }
 
-GLint ShaderProgram::get_uniform_location(const std::string& name) const {
-  return glGetUniformLocation(handle, name.c_str());
+GLint ShaderProgram::get_uniform_location(std::string_view name) const {
+  return glGetUniformLocation(handle, std::string(name).c_str());
 }
 
-void ShaderProgram::set_bool(const std::string& name, bool value) const {
-  glUniform1i(glGetUniformLocation(handle, name.c_str()), static_cast<int>(value));
+void ShaderProgram::set_bool(std::string_view name, bool value) const {
+  glUniform1i(get_uniform_location(name), static_cast<int>(value));
 }
 
-void ShaderProgram::set_int(const std::string& name, int value) const {
-  glUniform1i(glGetUniformLocation(handle, name.c_str()), value);
+void ShaderProgram::set_int(std::string_view name, int value) const {
+  glUniform1i(get_uniform_location(name), value);
 }
 
-void ShaderProgram::set_float(const std::string& name, float value) const {
-  glUniform1f(glGetUniformLocation(handle, name.c_str()), value);
+void ShaderProgram::set_float(std::string_view name, float value) const {
+  glUniform1f(get_uniform_location(name), value);
 }
 }

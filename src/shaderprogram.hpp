@@ -1,9 +1,11 @@
 #pragma once
 
 #include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <source_location>
-#include <string>
 #include <string_view>
+#include <type_traits>
 
 namespace lgl {
 
@@ -36,11 +38,35 @@ class ShaderProgram {
    * @param name name of the uniform variable
    * @return GLint handle to the variable
    */
-  GLint get_uniform_location(const std::string& name) const;
+  GLint get_uniform_location(std::string_view name) const;
 
-  void set_bool(const std::string& name, bool value) const;
-  void set_int(const std::string& name, int value) const;
-  void set_float(const std::string& name, float value) const;
+  void set_bool(std::string_view name, bool value) const;
+  void set_int(std::string_view name, int value) const;
+  void set_float(std::string_view name, float value) const;
+
+  /**
+   * Generalized uniform setter.
+   *
+   * @tparam Ty type of the value
+   * @param name name of the uniform variable
+   * @param value value we're setting the variable to
+   */
+  template <typename Ty>
+  void set_uniform(std::string_view name, const Ty& value) const {
+    GLint unif_loc = get_uniform_location(name);
+
+    if constexpr (std::is_same_v<Ty, bool>) {
+      glUniform1i(unif_loc, static_cast<GLint>(value));
+    } else if constexpr (std::is_same_v<Ty, GLint>) {
+      glUniform1i(unif_loc, value);
+    } else if constexpr (std::is_same_v<Ty, GLfloat>) {
+      glUniform1f(unif_loc, value);
+    } else if constexpr (std::is_same_v<Ty, glm::mat4>) {
+      glUniformMatrix4fv(unif_loc, 1, GL_FALSE, glm::value_ptr(value));
+    } else {
+      static_assert(false, "Received an invalid type. Cannot convert to GLSL type");
+    }
+  }
 };
 
 }

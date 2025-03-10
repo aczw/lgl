@@ -90,7 +90,7 @@ int main(Variant variant) {
   std::vector<float> vertices{};
   std::vector<int> indices{};
 
-  if (variant == Variant::triangle) {
+  if (variant == Variant::Triangle) {
     vertices = {
         -0.5f, -0.5f, 0.0f,  // Bottom left
         0.5f,  -0.5f, 0.0f,  // Bottom right

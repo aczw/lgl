@@ -121,8 +121,8 @@ int main() {
   stbi_image_free(data);
 
   shader_prog.use();
-  shader_prog.set_int("tex_0", 0);
-  shader_prog.set_int("tex_1", 1);
+  shader_prog.set_uniform("tex_0", 0);
+  shader_prog.set_uniform("tex_1", 1);
 
   constexpr glm::mat4 ident = glm::identity<glm::mat4>();
   constexpr glm::mat4 trans = glm::translate(ident, glm::vec3(0.5f, -0.5f, 0.0f));
@@ -143,7 +143,7 @@ int main() {
     glBindTexture(GL_TEXTURE_2D, tex_1_handle);
 
     glm::mat4 rot = glm::rotate(trans, static_cast<float>(glfwGetTime()), util::z_axis);
-    glUniformMatrix4fv(trans_loc, 1, GL_FALSE, glm::value_ptr(rot));
+    shader_prog.set_uniform("u_Trans", rot);
 
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
